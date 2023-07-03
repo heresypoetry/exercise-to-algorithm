@@ -1,0 +1,88 @@
+//
+//  main.cpp
+//  introduction to algoriam
+//
+//  Created by apple on 2023/7/2.
+//
+
+//快速排序算法
+
+#include <iostream>
+#include<vector>
+using namespace std;
+vector<int> vecswap(vector<int> v, int i, int j)
+{
+    int temp;
+    temp = v[i];v[i] = v[j]; v[j] = temp;return v;
+}
+int vecpartition(vector<int>v,int p,int r);
+vector<int> shuffle(vector<int>v,int p, int r, int q);
+int shuffleint(vector<int>v,int p, int r, int q);
+
+vector<int> quicksort(vector<int> v,int p, int r){
+    int q,k;vector<int> save;
+    if(p<r){
+        q = vecpartition(v,p,r);
+        k = shuffleint(v,p,r,q);
+        v = shuffle(v,p,r,q);
+        cout<<"k is"<<q<<endl;
+        save.push_back(k);
+        quicksort(v, p, k-1);
+        k = save[save.size()-1];
+        save.pop_back();
+        quicksort(v, k+1, r);
+    }
+    return v;
+}
+
+int main(int argc, const char * argv[]) {
+    vector<int> vec;
+    int n,newnumber,i;
+    cin>>n;
+    for(i=0;i<n;i++){
+        cin>>newnumber;
+        vec.push_back(newnumber);
+    }
+    vec = quicksort(vec,0,n-1);
+    //cout<<shuffleint(vec, 0, 5, 5)<<endl;
+    //vec = shuffle(vec,0,5,5);
+    for(i =0;i<n;i++){cout<<vec[i];}
+    return 0;
+}
+
+int vecpartition(vector<int>v,int p,int r){
+    if(r-p <=2){return  p;}
+    else{
+        if((v[r]<=v[p] && v[r]>=v[(r+p)/2]) || (v[r]>=v[p] && v[r]<=v[(r+p)/2] )){return r;}
+        if((v[p]<=v[r] && v[p]>=v[(r+p)/2])  || (v[p]>=v[r] && v[p]<=v[(r+p)/2]) ){return p;}
+        if((v[(r+p)/2]<=v[p] && v[(r+p)/2]>=v[r])  || (v[(r+p)/2]>=v[p] && v[(r+p)/2]<=v[r]) ){return (r+p)/2;}
+    }
+    return 0;
+}
+
+vector<int> shuffle(vector<int>v,int p, int r, int q){
+    int i,j;
+    v = vecswap(v,q,r);
+    i = p;j=r-1;
+    while(i<=j){
+        while(v[i]<v[r]){i+=1;}
+        while(v[j]>v[r]){j=j-1;}
+        if(i<=j){v = vecswap(v,i,j);i=i+1;j=j-1;}else{break;}
+    }
+    q=i;
+    v = vecswap(v, i, r);
+    return v;
+}
+
+int shuffleint(vector<int>v,int p, int r, int q){
+    int i,j;
+    v = vecswap(v,q,r);
+    i = p;j=r-1;
+    while(i<=j){
+        while(v[i]<v[r]){i+=1;}
+        while(v[j]>v[r]){j=j-1;}
+        if(i<=j){v = vecswap(v,i,j);i=i+1;j=j-1;}else{break;}
+    }
+    v = vecswap(v, i, r);
+    return i;
+}
