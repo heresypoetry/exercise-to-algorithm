@@ -1,0 +1,64 @@
+//
+//  main.cpp
+//  introduction to algoriam
+//
+//  Created by apple on 2023/7/2.
+//
+
+
+//先输入需要排序的整型个数，再依次输入每个整型，之间以回车键分割。
+#include <iostream>
+#include<vector>
+using namespace std;
+vector<int> max_heapify(vector<int>&v,int k,int s); //这个函数输入向量v和下标k，向量v满足LEFT（k）,RIGHT(k)均是最大堆，A[k]可能小于孩子，此算法讲k处对应子树调整为最大堆；
+vector<int> result(vector<int>&v);//对最大堆v排序。
+vector<int> build_max_heap(vector<int>&v);
+int parent(int i){return (i-1)/2;}
+int left(int i){return 2*i+1;}
+int right(int i){return 2*i+2;}
+
+int main(int argc, const char * argv[]) {
+    vector<int> vec;
+    int n,newnumber,i;
+    cin>>n;
+    for(i=0;i<n;i++){
+        cin>>newnumber;
+        vec.push_back(newnumber);
+    }
+    vec = build_max_heap(vec);
+    vec = result(vec);
+    for(i =0;i<n;i++){cout<<vec[i]<<endl;}
+    return 0;
+}
+
+vector<int> max_heapify(vector<int>&v,int k,int s)
+{
+    int l,r,n,maxnumber,temp;
+    l = left(k);r = right(k);n=v.size()-s-1;
+    if((l>n && r>n)||(l<=n && r <=n && v[k]>=v[l] && v[k]>=v[r]) || (l<=n && r>n && v[k] >= v[l])){return v;}
+    else
+    {   maxnumber = k;
+        if(l <= n && v[l]>v[k]){maxnumber = l;}
+        if(r <= n && v[r] > v[maxnumber]){maxnumber = r;}
+        temp = v[k];v[k] = v[maxnumber];v[maxnumber] = temp;
+        //cout<<v[maxnumber]<<endl;
+        max_heapify(v,maxnumber,s);return v;
+    }
+}
+vector<int> result(vector<int>&v){
+    int i,j,n,temp; n = v.size();
+    for(i =n-1;i>=1;i=i-1 ){
+        temp = v[0];v[0] = v[i];v[i] = temp;
+        max_heapify(v, 0,n-i);
+    }
+    return v;
+}
+vector<int> build_max_heap(vector<int>&v)
+{
+    int n,i; n = v.size();
+    for(i = n/2-1;i>=0;i--)
+    {
+        max_heapify(v, i, 0);
+    }
+    return v;
+}
