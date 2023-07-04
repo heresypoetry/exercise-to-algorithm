@@ -1,0 +1,38 @@
+//
+//  main.cpp
+//  introduction to algoriam
+//
+//  Created by apple on 2023/7/2.
+//
+
+//计数排序算法（输入数据的规模小于等于m）先输入规模m,再输入数据集个数n，最后输入n个整型。全用回车分割。
+
+#include <iostream>
+#include<vector>
+using namespace std;
+
+
+int main(int argc, const char * argv[]) {
+    vector<int> vec;
+    int m,i;
+    int n,newnumber;
+    cin>>m;
+    cin>>n;
+    for(i=0;i<n;i++){
+        cin>>newnumber;
+        vec.push_back(newnumber);
+    }
+    vector<int> b,c;
+    for(i=0;i<m;i++){c.push_back(0);}for(i=0;i<n;i++){b.push_back(0);}
+    for(i=0;i<n;i++){
+        c[vec[i]] = c[vec[i]]+1;
+    }
+    for(i=1;i<m;i++){c[i] = c[i] + c[i-1];}
+    //for(i =0;i<n;i++){cout<<c[i]<<endl;}
+    for(i=n-1;i>=0;i=i-1){
+        b[c[vec[i]]-1] = vec[i];
+        c[vec[i]] = c[vec[i]]-1;
+    }
+    for(i =0;i<n;i++){cout<<b[i]<<endl;}
+    return 0;
+}
